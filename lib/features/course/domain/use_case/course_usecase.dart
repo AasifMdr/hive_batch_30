@@ -15,7 +15,7 @@ class CourseUseCase {
 
   CourseUseCase({required this.courseRepository});
 
-  Future<Either<dynamic, List>> getAllCourses() {
+  Future<Either<dynamic, List<CourseEntity>>> getAllCourses() {
     return courseRepository.getAllCourses();
   }
 

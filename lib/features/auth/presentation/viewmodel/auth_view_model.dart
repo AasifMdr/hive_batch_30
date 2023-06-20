@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_and_api_for_class/features/auth/domain/entity/student_entity.dart';
 import 'package:hive_and_api_for_class/features/auth/domain/use_case/auth_usecase.dart';
@@ -14,6 +16,20 @@ class AuthViewModel extends StateNotifier<AuthState> {
   final AuthUseCase _authUseCase;
 
   AuthViewModel(this._authUseCase) : super(AuthState(isLoading: false));
+
+  Future<void> uploadImage(File? file) async {
+    state = state.copyWith(isLoading: true);
+    var data = await _authUseCase.uploadProfilePicture(file!);
+    data.fold(
+      (l) {
+        state = state.copyWith(isLoading: false, error: l.error);
+      },
+      (imageName) {
+        state =
+            state.copyWith(isLoading: false, error: null, imageName: imageName);
+      },
+    );
+  }
 
   Future<void> registerStudent(StudentEntity student) async {
     state = state.copyWith(isLoading: true);
@@ -46,4 +62,3 @@ class AuthViewModel extends StateNotifier<AuthState> {
     return isLogin;
   }
 }
-

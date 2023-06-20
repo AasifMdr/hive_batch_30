@@ -21,6 +21,26 @@ class RegisterView extends ConsumerStatefulWidget {
 }
 
 class _RegisterViewState extends ConsumerState<RegisterView> {
+  File? _img;
+  Future _browseImage(WidgetRef ref, ImageSource imageSource) async {
+    try {
+      final image = await ImagePicker().pickImage(source: imageSource);
+      if (image != null) {
+        setState(() {
+          _img = File(image.path);
+          setState(() {
+            _img = File(image.path);
+            ref.read(authViewModelProvider.notifier).uploadImage(_img!);
+          });
+        });
+      } else {
+        return;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   BatchEntity? _dropDownValue;
   final List<CourseEntity> _lstCourseSelected = [];
 
@@ -38,22 +58,6 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
     if (await Permission.camera.request().isRestricted ||
         await Permission.camera.request().isDenied) {
       await Permission.camera.request();
-    }
-  }
-
-  File? _img;
-  Future _browseImage(WidgetRef ref, ImageSource imageSource) async {
-    try {
-      final image = await ImagePicker().pickImage(source: imageSource);
-      if (image != null) {
-        setState(() {
-          _img = File(image.path);
-        });
-      } else {
-        return;
-      }
-    } catch (e) {
-      debugPrint(e.toString());
     }
   }
 
@@ -120,7 +124,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                         radius: 50,
                         backgroundImage: _img != null
                             ? FileImage(_img!)
-                            : const AssetImage('assets/images/images.png')
+                            : const AssetImage('assets/images/profile.png')
                                 as ImageProvider,
                       ),
                     ),
