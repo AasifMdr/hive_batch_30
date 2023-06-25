@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_and_api_for_class/config/router/app_route.dart';
+
+import '../viewmodel/splash_view_model.dart';
 
 class SplashView extends ConsumerStatefulWidget {
   const SplashView({super.key});
@@ -12,8 +13,8 @@ class SplashView extends ConsumerStatefulWidget {
 class _SplashViewState extends ConsumerState<SplashView> {
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.popAndPushNamed(context, AppRoute.loginRoute);
+    Future.delayed(const Duration(seconds: 3), () {
+      ref.read(splashViewModelProvider.notifier).init(context);
     });
     super.initState();
   }
@@ -49,7 +50,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
             bottom: 10,
             left: MediaQuery.of(context).size.width / 4,
             child: const Text(
-              'Developed by: Khatra Sir le',
+              'Developed by: Aasif Sir',
               style: TextStyle(fontSize: 15),
             ),
           ),
